@@ -66,42 +66,60 @@ New tenders and proposals reflected in real-time in Supabase.
 
 ## 📁 Folder Structure
 
+b2b-tender-platform/
+├── backend/
+│   ├── routes/
+│   ├── controllers/
+│   ├── db/
+│   ├── .env
+│   └── server.js
+└── frontend/
+    └── bid-sphere-platform-main/
+        ├── src/
+        ├── index.html
+        ├── vite.config.ts
+        └── ...
+
+---
 
 ## ✅ Features
-Company registration & profile management
 
-Post and view tenders
+###Company registration & profile management
 
-Browse & apply to tenders
+###Post and view tenders
 
-Dynamic tender proposal forms
+###Browse & apply to tenders
 
-Full backend integration with Supabase DB
+###Dynamic tender proposal forms
+
+###Full backend integration with Supabase DB
+
+---
+
+##📦 Deployment
+###You can deploy this project to:
+
+###Frontend: Vercel / Netlify
+
+###Backend: Render / Railway / Fly.io
+
+###Database: Supabase (Cloud hosted)
+
+---
+
+##🧠 Future Improvements
+###Add authentication UI (login/signup)
+
+###Proposal history and messaging
+
+###Admin dashboard for approvals
+
+---
+##📄 License
+###This project is licensed under the MIT License.
 
 
-📦 Deployment
-You can deploy this project to:
-
-Frontend: Vercel / Netlify
-
-Backend: Render / Railway / Fly.io
-
-Database: Supabase (Cloud hosted)
-
-
-
-🧠 Future Improvements
-Add authentication UI (login/signup)
-
-Proposal history and messaging
-
-Admin dashboard for approvals
-
-
-📄 License
-This project is licensed under the MIT License.
-
-
+---
 
 
 
