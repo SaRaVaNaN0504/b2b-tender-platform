@@ -68,57 +68,51 @@ New tenders and proposals reflected in real-time in Supabase.
 
 backend/
 ├── middleware/
-│   └── authMiddleware.js
+│ └── authMiddleware.js
 ├── routes/
-│   ├── auth.js
-│   ├── company.js
-│   └── tender.js
+│ ├── auth.js
+│ ├── company.js
+│ └── tender.js
 ├── .env
 ├── db.js
 ├── db-test.js
 ├── server.js
 ├── package.json
-└── package-lock.jsons
+└── package-lock.json
+
 ---
 
 ## ✅ Features
 
-###Company registration & profile management
-
-###Post and view tenders
-
-###Browse & apply to tenders
-
-###Dynamic tender proposal forms
-
-###Full backend integration with Supabase DB
+- **Company registration & profile management**
+- **Post and view tenders**
+- **Browse & apply to tenders**
+- **Dynamic tender proposal forms**
+- **Full backend integration with Supabase DB**
 
 ---
 
-##📦 Deployment
-###You can deploy this project to:
+## 📦 Deployment
 
-###Frontend: Vercel / Netlify
+You can deploy this project to:
 
-###Backend: Render / Railway / Fly.io
+- **Frontend:** Vercel / Netlify  
+- **Backend:** Render / Railway / Fly.io  
+- **Database:** Supabase (Cloud hosted)
 
-###Database: Supabase (Cloud hosted)
+---
+
+## 🧠 Future Improvements
+
+- Add authentication UI (login/signup)
+- Proposal history and messaging
+- Admin dashboard for approvals
 
 ---
 
-##🧠 Future Improvements
-###Add authentication UI (login/signup)
+## 📄 License
 
-###Proposal history and messaging
-
-###Admin dashboard for approvals
-
----
-##📄 License
-###This project is licensed under the MIT License.
-
-
----
+This project is licensed under the **MIT License**.
 
 
 
