@@ -1,24 +1,29 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, Calendar, IndianRupee, Building2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { Search, Calendar, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const TenderListing = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [filterBy, setFilterBy] = useState("all");
 
-  // Mock data - will be replaced with real data hooks
   const tenders = [
     {
       id: 1,
       title: "Enterprise Software Development",
-      description: "We are looking for a development team to build a comprehensive enterprise management system with modules for HR, Finance, and Operations...",
+      description: "We are looking for a development team to build a comprehensive enterprise management system...",
       budget: 1200000,
       deadline: "2024-08-30",
       companyName: "GlobalTech Corp",
@@ -30,7 +35,7 @@ const TenderListing = () => {
     {
       id: 2,
       title: "Marketing Campaign Management",
-      description: "Looking for a creative agency to handle our Q4 marketing campaigns across digital and traditional media channels...",
+      description: "Looking for a creative agency to handle our Q4 marketing campaigns...",
       budget: 600000,
       deadline: "2024-07-25",
       companyName: "RetailMax Ltd",
@@ -42,7 +47,7 @@ const TenderListing = () => {
     {
       id: 3,
       title: "Cloud Infrastructure Migration",
-      description: "Seeking experienced cloud architects to migrate our on-premise infrastructure to AWS with minimal downtime...",
+      description: "Seeking experienced cloud architects to migrate our on-premise infrastructure to AWS...",
       budget: 1600000,
       deadline: "2024-09-15",
       companyName: "FinanceFirst Bank",
@@ -54,7 +59,7 @@ const TenderListing = () => {
     {
       id: 4,
       title: "Mobile App Development",
-      description: "Development of iOS and Android apps for our e-commerce platform with integrated payment gateway and inventory management...",
+      description: "Development of iOS and Android apps for our e-commerce platform...",
       budget: 680000,
       deadline: "2024-08-10",
       companyName: "ShopEasy Inc",
@@ -66,7 +71,7 @@ const TenderListing = () => {
     {
       id: 5,
       title: "Data Analytics Platform",
-      description: "Building a comprehensive data analytics platform with real-time reporting and predictive analytics capabilities...",
+      description: "Building a comprehensive data analytics platform...",
       budget: 960000,
       deadline: "2024-09-01",
       companyName: "DataCorp Analytics",
@@ -78,7 +83,7 @@ const TenderListing = () => {
     {
       id: 6,
       title: "Cybersecurity Audit & Implementation",
-      description: "Comprehensive security audit and implementation of security measures for our enterprise network and applications...",
+      description: "Comprehensive security audit and implementation...",
       budget: 760000,
       deadline: "2024-08-20",
       companyName: "SecureNet Solutions",
@@ -89,25 +94,43 @@ const TenderListing = () => {
     }
   ];
 
-  const filteredTenders = tenders.filter(tender =>
-    tender.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tender.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tender.companyName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter tenders
+  const filteredTenders = tenders
+    .filter(tender => {
+      const searchMatch =
+        tender.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tender.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tender.companyName.toLowerCase().includes(searchTerm.toLowerCase());
 
-  const formatCurrency = (amount: number) => {
-    return `₹${(amount / 100000).toFixed(1)}L`;
-  };
+      const industryMatch = filterBy === "all" || tender.industry.toLowerCase() === filterBy;
+      return searchMatch && industryMatch;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "budget-high":
+          return b.budget - a.budget;
+        case "budget-low":
+          return a.budget - b.budget;
+        case "oldest":
+          return new Date(a.postedDate).getTime() - new Date(b.postedDate).getTime();
+        case "deadline":
+          return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+        case "newest":
+        default:
+          return new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime();
+      }
+    });
+
+  const formatCurrency = (amount: number) => `₹${(amount / 100000).toFixed(1)}L`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Browse Tenders</h1>
         <p className="text-gray-600">Discover business opportunities and submit your proposals</p>
       </div>
 
-      {/* Search and Filters */}
+      {/* Search & Filters */}
       <div className="bg-white p-6 rounded-lg shadow-sm border mb-8">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
@@ -119,7 +142,7 @@ const TenderListing = () => {
               className="pl-10"
             />
           </div>
-          
+
           <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className="w-full md:w-48">
               <SelectValue placeholder="Sort by" />
@@ -132,35 +155,30 @@ const TenderListing = () => {
               <SelectItem value="deadline">Deadline</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Select value={filterBy} onValueChange={setFilterBy}>
             <SelectTrigger className="w-full md:w-48">
               <SelectValue placeholder="Filter by industry" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Industries</SelectItem>
-              <SelectItem value="technology">Technology</SelectItem>
-              <SelectItem value="finance">Finance</SelectItem>
-              <SelectItem value="retail">Retail</SelectItem>
-              <SelectItem value="healthcare">Healthcare</SelectItem>
+              {[...new Set(tenders.map(t => t.industry.toLowerCase()))].map(ind => (
+                <SelectItem key={ind} value={ind}>{ind.charAt(0).toUpperCase() + ind.slice(1)}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      {/* Results Summary */}
+      {/* Summary */}
       <div className="flex justify-between items-center mb-6">
-        <p className="text-gray-600">
-          Showing {filteredTenders.length} of {tenders.length} tenders
-        </p>
-        <div className="text-sm text-gray-500">
-          Page 1 of 1
-        </div>
+        <p className="text-gray-600">Showing {filteredTenders.length} of {tenders.length} tenders</p>
+        <p className="text-sm text-gray-500">Page 1 of 1</p>
       </div>
 
       {/* Tender Cards */}
       <div className="grid gap-6 mb-8">
-        {filteredTenders.map((tender) => (
+        {filteredTenders.map(tender => (
           <Card key={tender.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="flex justify-between items-start">
@@ -184,44 +202,31 @@ const TenderListing = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-green-600 mb-1">
-                    {formatCurrency(tender.budget)}
-                  </div>
+                  <div className="text-2xl font-bold text-green-600 mb-1">{formatCurrency(tender.budget)}</div>
                   <div className="text-sm text-gray-500">Budget</div>
                 </div>
               </div>
             </CardHeader>
-            
+
             <CardContent>
-              <p className="text-gray-700 mb-4 line-clamp-2">
-                {tender.description}
-              </p>
-              
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-6 text-sm text-gray-500">
+              <p className="text-gray-700 mb-4 line-clamp-2">{tender.description}</p>
+              <div className="flex items-center justify-between mb-4 text-sm text-gray-500">
+                <div className="flex items-center space-x-6">
                   <div className="flex items-center space-x-1">
                     <Calendar className="h-4 w-4" />
-                    <span>Deadline: {tender.deadline}</span>
+                    <span>Deadline: {format(new Date(tender.deadline), "PPP")}</span>
                   </div>
-                  <div className="flex items-center space-x-1">
-                    <span>{tender.applicants} applicants</span>
-                  </div>
-                  <div>
-                    Posted: {tender.postedDate}
-                  </div>
+                  <span>{tender.applicants} applicants</span>
+                  <span>Posted: {format(new Date(tender.postedDate), "PPP")}</span>
                 </div>
               </div>
-              
+
               <div className="flex justify-between items-center">
                 <Link to={`/company/${tender.id}`}>
-                  <Button variant="outline" size="sm">
-                    View Company
-                  </Button>
+                  <Button variant="outline" size="sm">View Company</Button>
                 </Link>
                 <Link to={`/tender/apply/${tender.id}`}>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    Apply Now
-                  </Button>
+                  <Button className="bg-blue-600 hover:bg-blue-700">Apply Now</Button>
                 </Link>
               </div>
             </CardContent>
@@ -229,16 +234,12 @@ const TenderListing = () => {
         ))}
       </div>
 
-      {/* Pagination */}
+      {/* Pagination Placeholder */}
       <div className="flex justify-center">
         <div className="flex space-x-2">
-          <Button variant="outline" disabled>
-            Previous
-          </Button>
+          <Button variant="outline" disabled>Previous</Button>
           <Button variant="default">1</Button>
-          <Button variant="outline" disabled>
-            Next
-          </Button>
+          <Button variant="outline" disabled>Next</Button>
         </div>
       </div>
     </div>
