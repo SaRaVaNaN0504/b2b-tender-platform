@@ -66,20 +66,19 @@ New tenders and proposals reflected in real-time in Supabase.
 
 ## 📁 Folder Structure
 
-b2b-tender-platform/
-├── backend/
-│   ├── routes/
-│   ├── controllers/
-│   ├── db/
-│   ├── .env
-│   └── server.js
-└── frontend/
-    └── bid-sphere-platform-main/
-        ├── src/
-        ├── index.html
-        ├── vite.config.ts
-        └── ...
-
+backend/
+├── middleware/
+│   └── authMiddleware.js
+├── routes/
+│   ├── auth.js
+│   ├── company.js
+│   └── tender.js
+├── .env
+├── db.js
+├── db-test.js
+├── server.js
+├── package.json
+└── package-lock.jsons
 ---
 
 ## ✅ Features
