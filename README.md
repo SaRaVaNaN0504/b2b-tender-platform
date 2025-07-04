@@ -64,24 +64,6 @@ New tenders and proposals reflected in real-time in Supabase.
 
 ---
 
-## 📁 Folder Structure
-
-backend/
-├── middleware/
-│ └── authMiddleware.js
-├── routes/
-│ ├── auth.js
-│ ├── company.js
-│ └── tender.js
-├── .env
-├── db.js
-├── db-test.js
-├── server.js
-├── package.json
-└── package-lock.json
-
----
-
 ## ✅ Features
 
 - **Company registration & profile management**
